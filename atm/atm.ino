@@ -4,13 +4,13 @@
 LiquidCrystal lcd(12,11,A4,A5,13,10);
 const byte ROWS = 4; 
 const byte COLS = 4;
+const int pirPin = A3;
 char keys[ROWS][COLS] = {
   {'7','8','9','C'},
   {'1','2','3','A'},
   {'4','5','6','B'},
   {'*','0','#','D'}
 };
-
 byte rowPins[ROWS] = { 2, 3, 4, 5 };
 byte colPins[COLS] = { 6, 7, 8, 9 };
 Keypad kpd = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
@@ -20,6 +20,7 @@ int fm = 0;
 void setup() {
   Serial.begin(9600);
   lcd.begin(16, 2);
+  pinMode(pirPin, INPUT);
 }
 
 void loop() {
@@ -66,6 +67,17 @@ void loop() {
     lcd.setCursor(0,1);
     lcd.print(fm);  
     lcd.print("             ");
+    //algorithm for each time motion sensor detects something
+    int pirStat = digitalRead(pirPin);
+    if(pirStat == HIGH){
+      Serial.print("I got chu");
+      delay(5000);
+      if(fm > 1){
+        fm--;
+      }else if(fm == 1){
+        fm = -2;
+      }
+    }
   }  
   //case 3: when fm exceeds 100 and need to be reset
   while(fm==-1){
