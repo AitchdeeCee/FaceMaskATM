@@ -71,6 +71,7 @@ void loop() {
     int pirStat = digitalRead(pirPin);
     if(pirStat == HIGH){
       Serial.print("I got chu");
+      tone(A1, 100, 500);
       delay(5000);
       if(fm > 1){
         fm--;
